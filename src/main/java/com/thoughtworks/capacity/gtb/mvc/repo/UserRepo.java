@@ -1,6 +1,7 @@
 package com.thoughtworks.capacity.gtb.mvc.repo;
 
 import com.thoughtworks.capacity.gtb.mvc.model.User;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class UserRepo {
         allUsers.add(user);
     }
 
-    public User getUserByName(String username){
-        return allUsers.stream().filter(user -> user.getUsername().equals(username)).collect(Collectors.toList()).get(0);
+    public Optional<User> getUserByName(String username){
+        return allUsers.stream().filter(user -> user.getUsername().equals(username)).findFirst();
     }
 }

@@ -1,7 +1,10 @@
 package com.thoughtworks.capacity.gtb.mvc.service;
 
+import com.thoughtworks.capacity.gtb.mvc.config.UserExistsException;
+import com.thoughtworks.capacity.gtb.mvc.config.UsernamePasswordMismatchException;
 import com.thoughtworks.capacity.gtb.mvc.model.User;
 import com.thoughtworks.capacity.gtb.mvc.repo.UserRepo;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,15 +17,19 @@ public class UserService {
     }
 
     public void userRegister(User user) {
-        userRepo.addNewUser(user);
+        if (userRepo.getUserByName(user.getUsername()).isPresent()) {
+            throw new UserExistsException("the username is taken");
+        } else {
+            userRepo.addNewUser(user);
+        }
     }
 
     public User userLogin(String username, String password) {
-        User user = userRepo.getUserByName(username);
-        if (user.getPassword().equals(password)) {
-            return user;
+        Optional<User> user = userRepo.getUserByName(username);
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
+            return user.get();
         } else {
-            return new User();
+            throw new UsernamePasswordMismatchException("username and password does not match");
         }
     }
 

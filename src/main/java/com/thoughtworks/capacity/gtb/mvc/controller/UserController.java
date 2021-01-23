@@ -3,6 +3,7 @@ package com.thoughtworks.capacity.gtb.mvc.controller;
 import com.thoughtworks.capacity.gtb.mvc.model.User;
 import com.thoughtworks.capacity.gtb.mvc.service.UserService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ public class UserController {
 
     @PostMapping(path = "/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void userRegister(@RequestBody User user) {
+    public void userRegister(@RequestBody @Valid User user) {
         userService.userRegister(user);
     }
 }
